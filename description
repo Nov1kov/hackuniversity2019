@@ -1,0 +1,9 @@
+
+1. поск статей с кратким описанием
+https://www.mediawiki.org/wiki/API:Opensearch
+https://en.wikipedia.org/w/api.php?action=opensearch&search=cat&limit=1&format=json
+
+
+
+json format of wiki content
+https://en.wikipedia.org/api/rest_v1/page/summary/Stack_Overflow
