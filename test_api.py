@@ -2,6 +2,7 @@
 import argparse
 
 from api import Api
+from grabber import Parser
 from wiki_api import WikiApi
 
 
@@ -25,15 +26,15 @@ if __name__=="__main__":
     wiki_api = WikiApi()
     api = Api()
 
-    #print(api.analise('Крупнейший по численности населения город России и её субъект — 12 615 882[2] чел. (2019)'))
-    infos = []
-    results = wiki_api.quotes('Бойцовский')
-    for result in results:
-        summaries = wiki_api.quotes(result)
-        for info in summaries:
-            logging.info(info)
-            infos.append(info)
+    response = wiki_api.parse('Джанго_освобождённый')
 
-    text_for_generate = '\n'.join(infos)
-    questions = api.get_questions(text_for_generate)
-    print(questions)
+    links = []
+    for page_title in wiki_api.quotes("Бойцовский Клуб"):
+        page = wiki_api.quote_page(page_title)
+
+        links.append('https://ru.wikiquote.org/wiki/' + page_title)
+
+    parser = Parser(links)
+    parser.run()
+    for q in parser.quotes:
+        print(q)

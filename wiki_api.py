@@ -1,6 +1,7 @@
 import logging
 from urllib.parse import urlencode
 
+import re
 import requests
 from mediawiki import MediaWiki
 from mediawiki.utilities import memoize
@@ -21,12 +22,18 @@ class WikiApi:
         results = []
 
         for word in words:
-            titles = self.wikiquote.quotes(word, results=5)
-            for title in titles:
-                response = self.wikiquote.page(title=title)
-                results.append(response)
+            titles = self.wikiquote.quotes(word, results=4)
+            results += titles
 
         return results
+
+    def quote_page(self, title):
+        response = {}
+        try:
+            response = self.wikiquote.page(title=title)
+        except Exception as e:
+            logging.exception(e)
+        return response
 
     def movies(self):
         # https://ru.wikipedia.org/w/api.php?format=xml&action=query&list=embeddedin&einamespace=0&eilimit=500&eititle=Template:Infobox_film
@@ -37,7 +44,7 @@ class WikiApi:
         results = []
 
         for word in words:
-            response = self.wikipedia.search(word, results=5)
+            response = self.wikipedia.search(word, results=4)
             short_descriptions = response
             results += short_descriptions
         return results
@@ -56,9 +63,19 @@ class WikiApi:
         for page in pages:
             try:
                 response = self.wikipedia.page(title=page)
-                results.append(response.summary)
-            except Exception:
-                logging.error('страница не ало ' + page)
+                content = response.content
+                sections = re.split(r'==.+?==', content)
+                if sections:
+                    summary = sections[0]
+                    results.append(summary)
+                    section_headers = re.findall(r'== \w+ ==', content)
+                    if '== Сюжет ==' in section_headers:
+                        index = section_headers.index('== Сюжет ==') + 1
+                        if len(sections) > index:
+                            plot = sections[index]
+                            results.append(plot)
+            except Exception as e:
+                logging.error(e)
         return results
 
 
@@ -82,7 +99,7 @@ class CustomWikiEngine(MediaWiki):
         search_params = {
             "list": "search",
             #"srprop": "",
-            #"srlimit": results,
+            "srlimit": results,
             "srsearch": query,
         }
 

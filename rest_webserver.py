@@ -41,7 +41,6 @@ async def new_quiz(request):
             logging.info(info)
             infos.append(info)
 
-
     text_for_generate = prepare(infos)
     questions = api.get_questions(text_for_generate)
     result = {
