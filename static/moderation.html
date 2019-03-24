@@ -13,15 +13,23 @@
 				<th>Answers</th>
 				<th>Right answer</th>
 			</tr>
+			{% for question in questions %}
 			<tr>
-				<td><input type="checkbox" class="form-check-input"></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td style="text-align:center;">
+					<input type="checkbox" class="form-check-input">
+				</td>
+				<td>{{question['question']}}</td>
+				<td>
+					<ul>
+						{% for answer in question['answers'] %}}
+						<li>{{answer}}</li>
+						{% end %}
+					</ul>
+				</td>
+				<td>{{question['rightAnswer']}}</td>
 			</tr>
+			{% end %}
 		</table></center>
-		<center><form action="">
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form></center>
+		<center><button type="submit" class="btn btn-primary">Submit</button></center>
 	</body>
 </html>

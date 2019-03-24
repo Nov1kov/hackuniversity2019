@@ -29,8 +29,7 @@ def prepare(infos):
     return replaced
 
 
-async def new_quiz(request):
-    keys = request.query['key'].split(',')
+def get_generated_quiz(keys):
     wiki_api = WikiApi()
     api = Api()
 
@@ -49,12 +48,17 @@ async def new_quiz(request):
     if quote_question and questions:
         questions.insert(0, quote_question)
     result = {
-        'questions' : questions,
+        'questions': questions,
         'pages': results,
         'original': text_for_generate
     }
+    return result
+
+
+async def new_quiz(request):
+    keys = request.query['key'].split(',')
+    result = get_generated_quiz(keys)
     text = json.dumps(result, indent=2, ensure_ascii=False)
-    logging.info(text)
     return web.Response(text=text)
 
 
@@ -86,8 +90,7 @@ def quote_generator(wiki_api, search_word):
     }
 
 
-app = web.Application()
-app.router.add_get('/', handle)
-app.router.add_get('/quiz', new_quiz)
-
-web.run_app(app)
+if __name__ == "__main__":
+    app = web.Application()
+    app.router.add_get('/quiz', new_quiz)
+    web.run_app(app)
