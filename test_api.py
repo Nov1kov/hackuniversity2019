@@ -26,12 +26,13 @@ if __name__=="__main__":
     wiki_api = WikiApi()
     api = Api()
 
-    response = wiki_api.parse('Джанго_освобождённый')
-
     links = []
+    movies_by_category = []
     for page_title in wiki_api.quotes("Бойцовский Клуб"):
         page = wiki_api.quote_page(page_title)
-
+        if page and page.categories:
+            category = page.categories[0]
+            movies_by_category = wiki_api.get_pages_by_categories(category)
         links.append('https://ru.wikiquote.org/wiki/' + page_title)
 
     parser = Parser(links)

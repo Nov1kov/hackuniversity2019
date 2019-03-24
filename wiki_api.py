@@ -22,7 +22,7 @@ class WikiApi:
         results = []
 
         for word in words:
-            titles = self.wikiquote.quotes(word, results=4)
+            titles = self.wikiquote.quotes(word, results=2)
             results += titles
 
         return results
@@ -34,6 +34,33 @@ class WikiApi:
         except Exception as e:
             logging.exception(e)
         return response
+
+    def get_pages_by_categories(self, category, limit=10):
+        # https://en.wikipedia.org/w/api.php?a
+        # ction=query&
+        # generator=categorymembers&
+        # gcmlimit=100&
+        # gcmtitle=Category:American%20male%20film%20actors&
+        # prop=pageimages&
+        # pilimit=100
+        S = requests.Session()
+
+        URL = "https://ru.wikipedia.org/w/api.php"
+
+        PARAMS = {
+            'action': "query",
+            'generator': "categorymembers",
+            'gcmtitle': category,
+            'gcmlimit': limit,
+            'format': "json"
+        }
+
+        R = S.get(url=URL, params=PARAMS)
+        DATA = R.json()
+        titles = []
+        if 'query' in DATA and DATA['query'] and DATA['query']['pages']:
+            titles = [value['title'] for key, value in DATA['query']['pages'].items()]
+        return titles
 
     def movies(self):
         # https://ru.wikipedia.org/w/api.php?format=xml&action=query&list=embeddedin&einamespace=0&eilimit=500&eititle=Template:Infobox_film
