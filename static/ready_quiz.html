@@ -1,0 +1,31 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Quiz_question</title>
+</head>
+<body>
+<center><h1>Quiz_question</h1></center>
+<center><table border="1" cols="3" width="1100">
+    <caption>Quiz_question</caption>
+    <tr>
+        <th style="width: 480px;">Question</th>
+        <th style="width: 300px;">Answers</th>
+        <th style="width: 300px;">Right answer</th>
+    </tr>
+    {% for question in questions %}
+    <tr>
+        <td>{{question['question']}}</td>
+        <td>
+            <ul>
+                {% for answer in question['answers'] %}}
+                <li>{{answer}}</li>
+                {% end %}
+            </ul>
+        </td>
+        <td>{{question['rightAnswer']}}</td>
+    </tr>
+    {% end %}
+</table></center>
+<center><button type="submit" class="btn btn-primary">Submit</button></center>
+</body>
+</html>
