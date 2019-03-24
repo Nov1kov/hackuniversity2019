@@ -25,6 +25,7 @@ def prepare(infos):
     result = '\n'.join(infos)
     import re
     replaced = re.sub(r'(\(.+?\))', '', result)
+    replaced = re.sub(r'({.+?})', '', replaced)
     return replaced
 
 
@@ -41,6 +42,7 @@ def get_generated_quiz(keys):
             infos.append(info)
 
     text_for_generate = prepare(infos)
+    logging.debug("request:\n" + text_for_generate)
     questions = api.get_questions(text_for_generate)
     quote_question = quote_generator(wiki_api, keys[0])
     if quote_question and questions:
