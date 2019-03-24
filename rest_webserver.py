@@ -38,7 +38,6 @@ def get_generated_quiz(keys):
     for result in results:
         summaries = wiki_api.parse(result)
         for info in summaries:
-            logging.info(info)
             infos.append(info)
 
     text_for_generate = prepare(infos)
