@@ -8,7 +8,6 @@ from api import Api
 from grabber import Parser
 from wiki_api import WikiApi
 
-
 logger = logging.getLogger('')
 logger.setLevel(logging.NOTSET)
 # create console handler and set level to debug
@@ -83,11 +82,11 @@ def quote_generator(wiki_api, search_word):
             return {}
         wrong_answers = movies_by_category[:3]
         wrong_answers.insert(randrange(len(wrong_answers) + 1), movie)
-        return  {
-      "question": "Откуда эта цитата?\n" + quotes[0],
-      "answers": wrong_answers,
-      "rightAnswer": movie,
-    }
+        return {
+            "question": "Откуда эта цитата?\n" + quotes[0],
+            "answers": wrong_answers,
+            "rightAnswer": movie,
+        }
 
 
 if __name__ == "__main__":
